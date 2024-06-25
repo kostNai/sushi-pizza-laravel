@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('category_name');
             $table->foreignIdFor(\App\Models\Product::class)->constrained()->onDelete('cascade');
+            $table->string('slug',50);
             $table->timestamps();
         });
     }

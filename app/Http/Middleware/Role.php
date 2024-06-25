@@ -29,7 +29,7 @@ class Role
                     return \response()->json([
                         'status'=>false,
                         'message'=>'Access denied'
-                    ]);
+                    ],401);
                 }
             }
         } catch (Exception $e) {
@@ -46,7 +46,7 @@ class Role
                 }catch (JWTException $e){
                     return response()->json([
 
-                        'code'   => 103,
+//                        'code'   => 103,
                         'message' => 'Token cannot be refreshed, please Login again'
                     ],401);
                 }

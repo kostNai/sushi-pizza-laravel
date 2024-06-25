@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password',250);
             $table->string('name',50)->nullable();
             $table->string('phone_number',13)->nullable();
+            $table->string('user_image',500)->nullable();
             $table->bigInteger('role_id')->nullable();
             $table->bigInteger('token_id')->nullable();
             $table->timestamps();

@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
-    protected $fillable = ['product_name','product_desc','product_weight','product_price','sale_count','category_id'];
+    protected $fillable = ['product_name','product_desc','product_weight','product_price','product_image','sale_count','category_id'];
+
 
     public function category():HasOne{
 
-        return $this->hasOne(Product_Category::class);
+        return $this->hasOne(Product_Category::class,'product_id','id');
     }
     public function discount():HasMany{
 

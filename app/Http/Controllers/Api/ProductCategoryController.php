@@ -27,14 +27,39 @@ class ProductCategoryController extends Controller
     }
 
     public function addCategory(Request $request){
-        $category = Product_Category::create([
+        if(!$request->category_name){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Введіть назву категорії'
+            ],500);
+        }
+        $category = Product_Category::where('category_name',$request->category_name)->first();
+        if($category){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Така категорія вже існує'
+            ],500);
+        }
+        $newCategory = Product_Category::create([
             'category_name'=>$request->category_name
         ]);
 
         return response()->json([
             'status'=>true,
             'message'=>'Success',
-            'category'=>$category
+            'category'=>$newCategory
         ]);
+    }
+
+    public function getProduct(Request $request){
+        $category = Product_Category::where('category_name',$request->category_name)->first();
+        if(!$category){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Category not found'
+            ]);
+        }
+        $products = $category->poduct;
+        dd($products);
     }
 }

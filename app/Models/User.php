@@ -12,13 +12,13 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
 
-    protected $fillable = ['login','email','password','name','phone_number'];
+    protected $fillable = ['login','email','password','name','phone_number','user_image','role_id','role'];
 
     protected $hidden = ['password','refresh_token'];
     use HasFactory;
-    public function role():HasOne{
+    public function role():HasMany{
 
-        return $this->hasOne(Role::class);
+        return $this->hasMany(Role::class,'user_id','id');
     }
     public function token():HasOne{
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('product_desc');
             $table->double('product_weight');
             $table->double('product_price');
+            $table->string('product_image',500);
             $table->integer('sale_count')->nullable();
             $table->timestamps();
         });

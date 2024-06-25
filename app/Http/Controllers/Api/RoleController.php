@@ -11,7 +11,8 @@ class RoleController extends Controller
 {
     public function getUsers(Request $request){
        $role = Role::where('role_name',$request->role_name)->first();
-       $users = $role->user;
+       $users = $role->users;
+//        $users = $role::with('users')->get();
        if(!$role){
            return response()->json([
                'status'=>false,
@@ -21,5 +22,34 @@ class RoleController extends Controller
        return response()->json([
            'users'=>$users
        ]);
+    }
+
+
+    public function addRole(Request $request){
+        $newRole = Role::create([
+            'role_name'=>$request->role_name
+        ]);
+
+        if(!$newRole){
+            return response()->json([
+                'status'=>false,
+                'message'=>'Error'
+            ]);
+        }
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Success',
+            'role'=>$newRole
+        ]);
+    }
+
+    public function getAll(){
+        $roles = Role::all();
+
+        return response()->json([
+            'status'=>true,
+            'roles'=>$roles
+        ]);
     }
 }
