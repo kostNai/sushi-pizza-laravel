@@ -114,7 +114,7 @@ class ProductController extends Controller
             'product'=>$product
         ]);
     }
-    public function getOrderedProduct (Request $request){
+    public function getOrderedProducts (Request $request){
         $param = $request->param;
         $order_option = $request->order_option?$request->order_option:'asc';
         $products = null;

@@ -22,6 +22,7 @@ Route::post('/user/{id}',[UserController::class,'editUser'])->middleware(Role::c
 Route::patch('/user',[UserController::class,'editCurrentUser'])->middleware(Role::class);
 Route::get('/users',[UserController::class,'getAll'])->middleware(Role::class);
 Route::get('/user',[UserController::class,'getCurrentUser'])->middleware(Auth::class);
+Route::get('/get-ordered-users',[UserController::class,'getOrderedUsers'])->middleware(Auth::class);
 
 
 
@@ -33,7 +34,7 @@ Route::delete('/product/{id}',[ProductController::class,'deleteProduct'])->middl
 Route::post('/product/{id}',[ProductController::class,'addImage'])->middleware(Role::class);
 Route::put('/product/{id}',[ProductController::class,'editProduct'])->middleware(Role::class);
 Route::get('/products-by-category',[ProductController::class,'getByCategory']);
-Route::get('/get-ordered-product',[ProductController::class,'getOrderedProduct']);
+Route::get('/get-ordered-products',[ProductController::class,'getOrderedProducts']);
 
 Route::get('/categories',[ProductCategoryController::class,'getAll']);
 Route::post('/add-category',[ProductCategoryController::class,'addCategory'])->middleware(Role::class);

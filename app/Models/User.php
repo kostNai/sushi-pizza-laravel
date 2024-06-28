@@ -16,9 +16,9 @@ class User extends Authenticatable implements JWTSubject
 
     protected $hidden = ['password','refresh_token'];
     use HasFactory;
-    public function role():HasMany{
+    public function role():HasOne{
 
-        return $this->hasMany(Role::class,'user_id','id');
+        return $this->hasOne(Role::class,'user_id','id');
     }
     public function token():HasOne{
 

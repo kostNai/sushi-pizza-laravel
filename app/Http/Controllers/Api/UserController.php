@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Role;
 use App\Models\Token;
 use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -315,6 +316,29 @@ class UserController extends Controller
            'Message'=>'Success'
        ]);
 
+    }
+    public function getOrderedUsers (Request $request){
+        $param = $request->param;
+        $order_option = $request->order_option?$request->order_option:'asc';
+        $users = null;
+        try{
+            if($param == 'role_name'){
+                $users = User::with('role')
+                    ->orderBy(Role::select('role_name')->whereColumn('roles.id','users.role_id'),$order_option)->get();
+                return response()->json([
+                    'users'=>$users
+                ]);
+            }
+            $users = User::with('role')->orderBy($param,$order_option)->get();
+            return response()->json([
+                'users'=>$users
+            ]);}
+        catch(HttpResponseException $exception){
+            return response()->json([
+                'status'=>false,
+                'Message'=>$exception
+            ]);
+        }
     }
 
     public function getCurrentUser(){
