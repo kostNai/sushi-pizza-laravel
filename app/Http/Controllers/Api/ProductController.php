@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Product;
 use App\Models\Product_Category;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -116,10 +117,25 @@ class ProductController extends Controller
     public function getOrderedProduct (Request $request){
         $param = $request->param;
         $order_option = $request->order_option?$request->order_option:'asc';
-        $products = Product::with('category')->orderBy($param,$order_option)->get();
-        return response()->json([
-            'products'=>$products
-        ]);
+        $products = null;
+        try{
+            if($param == 'category_name'){
+                $products = Product::with('category')
+                    ->orderBy(Product_Category::select('category_name')->whereColumn('product__categories.id','products.category_id'),$order_option)->get();
+                return response()->json([
+                    'products'=>$products
+                ]);
+            }
+            $products = Product::with('category')->orderBy($param,$order_option)->get();
+            return response()->json([
+                'products'=>$products
+            ]);}
+        catch(HttpResponseException $exception){
+            return response()->json([
+                'status'=>false,
+                'Message'=>$exception
+            ]);
+        }
     }
     public function deleteProduct($id){
         $product = Product::where('id',$id)->first();
