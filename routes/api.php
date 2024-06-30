@@ -19,7 +19,7 @@ Route::post('/refresh',[UserController::class,'refresh'])->middleware(Auth::clas
 Route::delete('/user/{id}',[UserController::class,'deleteUser'])->middleware(Role::class);
 Route::post('/user',[UserController::class,'addUser'])->middleware(Role::class);
 Route::post('/user/{id}',[UserController::class,'editUser'])->middleware(Role::class);
-Route::patch('/user',[UserController::class,'editCurrentUser'])->middleware(Role::class);
+Route::post('/user',[UserController::class,'editCurrentUser'])->middleware(Auth::class);
 Route::get('/users',[UserController::class,'getAll'])->middleware(Role::class);
 Route::get('/user',[UserController::class,'getCurrentUser'])->middleware(Auth::class);
 Route::get('/get-ordered-users',[UserController::class,'getOrderedUsers'])->middleware(Auth::class);

@@ -25,7 +25,7 @@ class Role
             $user = JWTAuth::parseToken()->authenticate();
             if($user){
                 $role = \App\Models\Role::where('id',$user->role_id)->first();
-                if($role->role_name!=='root'){
+                if($role->role_name !=='root' && $role->role_name !== 'admin'){
                     return \response()->json([
                         'status'=>false,
                         'message'=>'Access denied'

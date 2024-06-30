@@ -25,25 +25,25 @@ class UserController extends Controller
            return response()->json([
                'status'=>false,
                'message'=>'Необхідно заповнити всі поля'
-           ]);
+           ],500);
        }
        if(User::where('login',$login)->first()){
            return response()->json([
                'status'=>false,
                'message'=>'Користувач з таким логіном вже існує'
-           ]);
+           ],500);
        }
        if(strlen($request->password)<4){
            return response()->json([
                'status'=>false,
                'message'=>'Пароль має буди не менше 4 символів'
-           ]);
+           ],500);
        }
        if(User::where('email',$email)->first()){
            return response()->json([
                'status'=>false,
                'message'=>'Ця електронна адреса вже зайнята'
-           ]);
+           ],500);
        }
         $newRole = Role::create([
             'role_name'=>'user'
@@ -80,14 +80,14 @@ class UserController extends Controller
             return response()->json([
                 'status'=>false,
                 'message'=>'Усі поля мають бути заповнені'
-            ]);
+            ],500);
         }
 
         if(!User::where('login',$request->login)->first()){
             return response()->json([
                 'status'=>false,
                 'message'=>'Невірний логін'
-            ]);
+            ],500);
         }
 
         $user = User::where('login',$request->login)->first();
@@ -95,7 +95,7 @@ class UserController extends Controller
             return response()->json([
                 'status'=>false,
                 'message'=>'Невірний пароль'
-            ]);
+            ],500);
         }
         $new_access_token = Token::where('user_id',$user->id)->first();
         $role = Role::where('user_id',$user->id)->first();
@@ -269,19 +269,32 @@ class UserController extends Controller
 
     public function editCurrentUser(Request $request){
         $currentUser = auth()->user();
+        $user = User::with('role')->where('id',$currentUser->id)->first();
 
-        $currentUser->update([
-            'email'=>!$request->email||$request->email==''?$currentUser->email:$request->email,
-            'name'=>!$request->name||$request->name==''?$currentUser->name:$request->name,
-            'phone_number'=>!$request->phone_number||$request->phone_number==''?$currentUser->phone_number:$request->phone_number,
+        if($request->hasFile('user_img')) {
+            $url = Storage::disk('s3')->put('sushi/users_images', $request->file('user_img'));
+            $full_url = Storage::disk('s3')->url($url);
+            if (!$request->hasFile('user_img')) {
+                return response()->json([
+                    'message' => 'file error',
+                    'request' => $request
+                ], 404);
+            }
+        }
+        $user->update([
+            'email'=>!$request->email||$request->email==''?$user->email:$request->email,
+            'name'=>!$request->name||$request->name==''?$user->name:$request->name,
+            'phone_number'=>!$request->phone_number||$request->phone_number==''?$user->phone_number:$request->phone_number,
+            'user_image'=>$request->hasFile('user_img')?$full_url:$user->user_image
         ]);
 
-        $currentUser->save();
+
+        $user->save();
 
         return response()->json([
             'status'=>true,
             'message'=>'Success',
-            'user'=>$currentUser
+            'user'=>$user
         ]);
     }
     public function getAll(){
@@ -336,18 +349,26 @@ class UserController extends Controller
         catch(HttpResponseException $exception){
             return response()->json([
                 'status'=>false,
-                'Message'=>$exception
+                'Message'=>$exception->getMessage()
             ]);
         }
     }
 
     public function getCurrentUser(){
-        $user = auth()->user();
+        try{
 
+        $user = auth()->user();
         return response()->json([
             'status'=>true,
             'user'=>$user
         ]);
+        }catch (HttpResponseException $exception){
+            return response()->json([
+                'status'=>false,
+                'message'=>$exception->getMessage()
+            ]);
+        }
+
     }
 
 }
