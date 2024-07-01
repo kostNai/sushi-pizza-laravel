@@ -90,7 +90,7 @@ class UserController extends Controller
             ],500);
         }
 
-        $user = User::where('login',$request->login)->first();
+        $user = User::with(['role','address'])->where('login',$request->login)->first();
         if(!Hash::check($request->password,$user->password)){
             return response()->json([
                 'status'=>false,
@@ -304,7 +304,7 @@ class UserController extends Controller
             return response()->json([
                 'status'=>false,
                 'message'=>'error'
-            ]);
+            ],500);
         }
 
         return response()->json([
@@ -318,6 +318,12 @@ class UserController extends Controller
        $user = auth()->user();
 
        $token = Token::where('user_id',$user->id)->first();
+       if(!$token){
+           return response()->json([
+               'status'=>false,
+               'message'=>'Token not found'
+           ],404);
+       }
 
        $user->token_id = null;
        $token->delete();
@@ -350,14 +356,17 @@ class UserController extends Controller
             return response()->json([
                 'status'=>false,
                 'Message'=>$exception->getMessage()
-            ]);
+            ],500);
         }
     }
 
     public function getCurrentUser(){
         try{
 
-        $user = auth()->user();
+        $current_user = auth()->user();
+        $user = User::where('id',$current_user->id)->with(['role','address'])->get();
+
+
         return response()->json([
             'status'=>true,
             'user'=>$user
@@ -366,7 +375,7 @@ class UserController extends Controller
             return response()->json([
                 'status'=>false,
                 'message'=>$exception->getMessage()
-            ]);
+            ],500);
         }
 
     }

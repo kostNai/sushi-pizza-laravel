@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RoleController;
@@ -42,3 +43,7 @@ Route::post('/add-category',[ProductCategoryController::class,'addCategory'])->m
 
 Route::get('/roles',[RoleController::class,'getAll'])->middleware(Role::class);
 Route::post('/role',[RoleController::class,'addRole'])->middleware(Role::class);
+
+
+Route::post('/address',[AddressController::class, 'addAddress'])->middleware(Auth::class);
+Route::patch('/address/{id}',[AddressController::class,'editAddress'])->middleware(Auth::class);

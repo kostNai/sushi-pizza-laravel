@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('user_image',500)->nullable();
             $table->bigInteger('role_id')->nullable();
             $table->bigInteger('token_id')->nullable();
+            $table->bigInteger('address_id')->nullable();
             $table->timestamps();
         });
     }
