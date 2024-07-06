@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AddressController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\OrderProductController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\RoleController;
@@ -47,3 +49,16 @@ Route::post('/role',[RoleController::class,'addRole'])->middleware(Role::class);
 
 Route::post('/address',[AddressController::class, 'addAddress'])->middleware(Auth::class);
 Route::patch('/address/{id}',[AddressController::class,'editAddress'])->middleware(Auth::class);
+
+Route::post('/new-order',[OrderController::class,'newOrder']);
+Route::post('/add-to-order',[OrderController::class,'addToOrder']);
+Route::get('/get',[OrderController::class,'getOrder']);
+Route::delete('/order/{order_id}',[OrderController::class,'deleteOrder']);
+Route::get('/get2',[OrderController::class,'get2']);
+
+
+
+Route::post('/test2',[OrderController::class,'test2']);
+
+
+Route::get('/anotherTest',[OrderProductController::class,'anotherTest']);

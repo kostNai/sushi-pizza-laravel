@@ -28,6 +28,9 @@ class User extends Authenticatable implements JWTSubject
 
         return $this->hasOne(Address::class);
     }
+    public function order():HasOne{
+        return $this->hasOne(Order::class);
+    }
 
 
     public function getJWTIdentifier()

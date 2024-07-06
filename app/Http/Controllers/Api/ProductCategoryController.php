@@ -41,7 +41,8 @@ class ProductCategoryController extends Controller
             ],500);
         }
         $newCategory = Product_Category::create([
-            'category_name'=>$request->category_name
+            'category_name'=>$request->category_name,
+            'slug'=>$request->slug
         ]);
 
         return response()->json([
