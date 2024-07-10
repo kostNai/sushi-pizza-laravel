@@ -52,9 +52,11 @@ Route::patch('/address/{id}',[AddressController::class,'editAddress'])->middlewa
 
 Route::post('/new-order',[OrderController::class,'newOrder']);
 Route::post('/add-to-order',[OrderController::class,'addToOrder']);
-Route::get('/get',[OrderController::class,'getOrder']);
+Route::get('/get-order',[OrderController::class,'getOrder']);
+Route::delete('/order',[OrderController::class,'removeFromOrder']);
+Route::delete('/delete-from-order',[OrderController::class,'deleteFromOrder']);
 Route::delete('/order/{order_id}',[OrderController::class,'deleteOrder']);
-Route::get('/get2',[OrderController::class,'get2']);
+Route::patch('/order/{id}',[OrderController::class,'update_order']);
 
 
 
